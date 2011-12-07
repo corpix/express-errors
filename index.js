@@ -20,7 +20,7 @@ module.exports = function(app, opts){
   app.error(function(err, req, res, next){
     if (err instanceof NotFound){
       if(req.xhr)
-        return res.send({}, 404)
+        return res.send({ error: 'Not found' }, 404)
 
       res.render('errors/404', {
         layout: opts.layout,
@@ -32,7 +32,7 @@ module.exports = function(app, opts){
     } else {
       console.log(err.stack)
       if(req.xhr)
-        return res.send({}, 500)
+        return res.send({ error: 'Internal error' }, 500)
       res.render('errors/500', {
         layout: opts.layout,
         status: 500,
