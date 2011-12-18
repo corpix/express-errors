@@ -27,7 +27,7 @@ module.exports = function(app, opts){
         status: 404,
         error: err,
         showStack: app.settings.showStackError,
-        title: 'Oops! The page you requested desn\'t exist'
+        title: 'Oops! The page you requested doesn\'t exist'
       })
     } else {
       console.log(err.stack)
