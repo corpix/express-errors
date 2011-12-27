@@ -9,9 +9,24 @@ function NotFound(){
   Error.captureStackTrace(this, arguments.callee);
 }
 
-NotFound.prototype.__proto__ = Error.prototype;
+////
+// Error types comming here ->
+//
 
-ex.NotFound = NotFound;
+ex._NotFound = NotFound;
+
+for(var i in ex){
+  ex[i].prototype.__proto__ = Error.prototype;
+  (function(name, cl){
+    ex.__defineGetter__(name, function(){
+      return new cl()
+    });
+  })(i.slice(1), ex[i]);
+}
+
+////
+// <-
+//
 
 ex.bind = function(app, opts){
 
@@ -20,7 +35,7 @@ ex.bind = function(app, opts){
   });
   
   app.error(function(err, req, res, next){
-    if(!err.name || err.name == 'Error' || !ex[err.name]){
+    if(!err.name || err.name == 'Error' || !ex['_' + err.name]){
       console.log(err.stack);
       if(req.xhr)
         return res.send({ error: 'Internal error' }, 500);
