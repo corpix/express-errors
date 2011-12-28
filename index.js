@@ -9,11 +9,21 @@ function NotFound(){
   Error.captureStackTrace(this, arguments.callee);
 }
 
+function Forbidden(){
+  this.name = 'Forbidden';
+  this.status = 403;
+  this.message = 'Forbidden. You don\'t have permission to access this';
+
+  Error.call(this, this.message);
+  Error.captureStackTrace(this, arguments.callee);
+}
+
 ////
 // Error types comming here ->
 //
 
 ex._NotFound = NotFound;
+ex._Forbidden = Forbidden;
 
 for(var i in ex){
   ex[i].prototype.__proto__ = Error.prototype;
