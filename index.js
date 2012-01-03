@@ -1,6 +1,6 @@
 var ex = {};
 
-function NotFound(){
+ex._NotFound = function (){
   this.name = 'NotFound';
   this.status = 404;
   this.message = 'Oops! The page you requested doesn\'t exist';
@@ -9,7 +9,7 @@ function NotFound(){
   Error.captureStackTrace(this, arguments.callee);
 }
 
-function Forbidden(){
+ex._Forbidden = function (){
   this.name = 'Forbidden';
   this.status = 403;
   this.message = 'Forbidden. You don\'t have permission to access this';
@@ -18,12 +18,14 @@ function Forbidden(){
   Error.captureStackTrace(this, arguments.callee);
 }
 
-////
-// Error types comming here ->
-//
+ex._Unauthorized = function(){
+  this.name = 'Unauthorized';
+  this.status = 401;
+  this.message = 'Unauthorized';
 
-ex._NotFound = NotFound;
-ex._Forbidden = Forbidden;
+  Error.call(this, this.message);
+  Error.captureStackTrace(this, arguments.callee);
+}
 
 for(var i in ex){
   ex[i].prototype.__proto__ = Error.prototype;
@@ -41,12 +43,12 @@ for(var i in ex){
 ex.bind = function(app, opts){
 
   app.use(function(req, res, next){
-    next(new NotFound());
+    next(new ex._NotFound());
   });
   
   app.error(function(err, req, res, next){
     if(!err.name || err.name == 'Error' || !ex['_' + err.name]){
-      console.log(err.stack);
+      console.error(err);
       if(req.xhr)
         return res.send({ error: 'Internal error' }, 500);
 
