@@ -2,14 +2,16 @@
   "author": "Corpix <me@corpix.ru> (http://corpix.ru)",
   "name": "express-errors",
   "description": "Error handler",
-  "version": "0.0.5-1",
+  "version": "0.0.6",
   "repository": {
     "type": "git",
     "url": "git://github.com/corpix/express-errors.git"
   },
   "engines": {
-    "node": "~0.6.6"
+    "node": ">=0.5.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "express": "*"
+  },
   "devDependencies": {}
 }

@@ -1,54 +1,35 @@
-var ex = {};
+var fs = require('fs')
+  , path = require('path')
+  , basename = path.basename
+  , ex = {};
 
-ex._NotFound = function (){
-  this.name = 'NotFound';
-  this.status = 404;
-  this.message = 'Oops! The page you requested doesn\'t exist';
+ex.define = function(opts){
+  var fn = function(){
+    this.message = opts.message;
+    this.name = opts.name;
+    this.status = opts.status;
 
-  Error.call(this, this.message);
-  Error.captureStackTrace(this, arguments.callee);
+    Error.call(this, this.message);
+    Error.captureStackTrace(this, arguments.callee);
+  }
+
+  fn.prototype.__proto__ = Error.prototype;
+  ex.__defineGetter__(opts.name, function(){
+    return new fn();
+  });
+
+  return fn;
 }
-
-ex._Forbidden = function (){
-  this.name = 'Forbidden';
-  this.status = 403;
-  this.message = 'Forbidden. You don\'t have permission to access this';
-
-  Error.call(this, this.message);
-  Error.captureStackTrace(this, arguments.callee);
-}
-
-ex._Unauthorized = function(){
-  this.name = 'Unauthorized';
-  this.status = 401;
-  this.message = 'Unauthorized';
-
-  Error.call(this, this.message);
-  Error.captureStackTrace(this, arguments.callee);
-}
-
-for(var i in ex){
-  ex[i].prototype.__proto__ = Error.prototype;
-  (function(name, cl){
-    ex.__defineGetter__(name, function(){
-      return new cl()
-    });
-  })(i.slice(1), ex[i]);
-}
-
-////
-// <-
-//
 
 ex.bind = function(app, opts){
 
   app.use(function(req, res, next){
     next(new ex._NotFound());
   });
-  
+
   app.error(function(err, req, res, next){
-    if(!err.name || err.name == 'Error' || !ex['_' + err.name]){
-      console.error(err);
+    if(!err.name || err.name == 'Error' || !ex.hasOwnProperty(err.name)){
+      console.log('>>', err);
       if(req.xhr)
         return res.send({ error: 'Internal error' }, 500);
 
@@ -62,7 +43,7 @@ ex.bind = function(app, opts){
     }
 
     if(req.xhr)
-      return res.send({ error: err.name }, err.status);
+      return res.send({ error: err.message }, err.status);
 
     res.render('errors/' + err.status, {
       layout: opts.layout,
@@ -77,5 +58,21 @@ ex.bind = function(app, opts){
 
 }
 
+//
+// Loading errors
+//
+
+var httpErrors = __dirname + '/http';
+
+fs.readdir(httpErrors, function(err, files){
+  if(err)
+    throw new Error(err);
+
+  files.forEach(function(file){
+    var opts = require(httpErrors + '/' + file);
+    opts.name = basename(file, '.json');
+    ex.define(opts);
+  });
+});
 
 module.exports = ex;
