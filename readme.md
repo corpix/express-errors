@@ -33,7 +33,7 @@ Yeah, you can. Use .define method:
 
 ```javascript
     errors.define({
-      name: 'BadRequest', // You will be able to access it throught `errors.BadRequest` in future
+      name: 'BadRequest', // You will be able to access it through `errors.BadRequest` in future
       message: 'Bad request', // This message for XHR requests
       status: 400 // HTTP status
     });
