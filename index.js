@@ -24,7 +24,7 @@ ex.define = function(opts){
 ex.bind = function(app, opts){
 
   app.use(function(req, res, next){
-    next(new ex._NotFound());
+    next(ex.NotFound);
   });
 
   app.error(function(err, req, res, next){
