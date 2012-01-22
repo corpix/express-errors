@@ -23,7 +23,7 @@ ex.define = function(opts){
 
 ex.bind = function(app, opts){
 
-  if(!opts.lastRoute) {
+  if(opts.lastRoute == undefined || opts.lastRoute == true) {
     app.use(function(req, res, next){
       next(ex.NotFound);
     });
