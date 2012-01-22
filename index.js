@@ -23,9 +23,11 @@ ex.define = function(opts){
 
 ex.bind = function(app, opts){
 
-  app.use(function(req, res, next){
-    next(ex.NotFound);
-  });
+  if(!opts.lastRoute) {
+    app.use(function(req, res, next){
+      next(ex.NotFound);
+    });
+  }
 
   app.error(function(err, req, res, next){
     if(!err.name || err.name == 'Error' || !ex.hasOwnProperty(err.name)){
