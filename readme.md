@@ -32,6 +32,7 @@ You need create `views/errors` directory and add 401,403,404 error views.
 Currently this options are available:
 
   * `lastRoute` - if false `express-errors` will not maintain last app.use route(NotFound error)
+  * `plain` - if app.settings['view engine'] is undefined OR this option is presented res.send instead of res.render will be used
 
 #### Defining an error
 Yeah, you can. Use .define method:
