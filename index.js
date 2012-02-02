@@ -22,6 +22,12 @@ ex.define = function(opts){
 }
 
 ex.bind = function(app, opts){
+  if(!opts)
+    opts = {};
+
+  if(!app.set('view engine')){
+    opts.plain = true;
+  }
 
   if(opts.lastRoute == undefined || opts.lastRoute == true) {
     app.use(function(req, res, next){
@@ -32,7 +38,7 @@ ex.bind = function(app, opts){
   app.error(function(err, req, res, next){
     if(!err.name || err.name == 'Error' || !ex.hasOwnProperty(err.name)){
       console.log('>>', err);
-      if(req.xhr)
+      if(req.xhr || opts.plain)
         return res.send({ error: 'Internal error' }, 500);
 
       return res.render('errors/500', {
@@ -47,14 +53,17 @@ ex.bind = function(app, opts){
     if(req.xhr)
       return res.send({ error: err.message }, err.status);
 
-    res.render('errors/' + err.status, {
-      layout: opts.layout,
-      status: err.status,
-      error: err,
-      showStack: app.settings.showStackError,
-      title: err.message
-    });
-
+    if(opts.plain){
+      res.send(err.message, err.status);
+    } else {
+      res.render('errors/' + err.status, {
+        layout: opts.layout,
+        status: err.status,
+        error: err,
+        showStack: app.settings.showStackError,
+        title: err.message
+      });
+    }
 
   });
 
