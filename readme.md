@@ -15,17 +15,17 @@ Provides easy access to common http errors for express e.g.
 You need create `views/errors` directory and add 401,403,404 error views.
 
 ```javascript
-    var errors = require('express-errors');
-
-    errors.bind(app, { layout: false });
-    
     app.get('/400', function(req, res, next){
       next(errors.BadRequest); // You will get "bad request" error
     });
 
     app.get('/500', function(req, res, next){
       next(new Error('Something went wrong :(')); // You will get "Internal server error" error
-    })
+    });
+
+    var errors = require('express-errors');
+
+    errors.bind(app, { layout: false }); // Important! Call it after all routes ready
 ```
 
 #### Options
