@@ -37,7 +37,9 @@ ex.bind = function(app, opts){
 
   app.error(function(err, req, res, next){
     if(!err.name || err.name == 'Error' || !ex.hasOwnProperty(err.name)){
-      console.log('>>', err);
+      console.error(new Date().toLocaleString(), '>>', err);
+      console.log(err.stack);
+
       if(req.xhr || opts.plain)
         return res.send({ error: 'Internal error' }, 500);
 
