@@ -82,6 +82,9 @@ fs.readdir(httpErrors, function(err, files){
     throw new Error(err);
 
   files.forEach(function(file){
+    if(file.charAt(0) == '.')
+      return;
+
     var opts = require(httpErrors + '/' + file);
     opts.name = basename(file, '.json');
     ex.define(opts);
