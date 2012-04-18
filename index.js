@@ -35,7 +35,7 @@ ex.bind = function(app, opts){
     });
   }
 
-  app.error(function(err, req, res, next){
+  app.use(function(err, req, res, next){
     if(!err.name || err.name == 'Error' || !ex.hasOwnProperty(err.name)){
       console.error(new Date().toLocaleString(), '>>', err);
       console.log(err.stack);
