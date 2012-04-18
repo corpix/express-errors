@@ -8,6 +8,7 @@ Provides easy access to common http errors for express e.g.
   * 401 - Unathorized
   * 403 - Forbidden
   * 404 - NotFound
+  * 409 - Conflict
   * 500 - Internal server error
 
 ---
