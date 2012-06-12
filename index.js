@@ -69,6 +69,7 @@ ex.bind = function(app, opts){
 
   });
 
+  return ex;
 }
 
 //
