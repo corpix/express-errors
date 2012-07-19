@@ -16,6 +16,7 @@ Provides easy access to common http errors for express e.g.
 You need create `views/errors` directory and add 401,403,404 error views.
 
 ```javascript
+    var logger;
     app.get('/400', function(req, res, next){
       next(errors.BadRequest); // You will get "bad request" error
     });
@@ -26,7 +27,10 @@ You need create `views/errors` directory and add 401,403,404 error views.
 
     var errors = require('express-errors');
 
-    errors.bind(app, { layout: false }); // Important! Call it after all routes ready
+    logger = function(err){ // Custom logger function
+      console.error(err);
+    }
+    errors.bind(app, { layout: false, logger: logger }); // IMPORTANT! Call it after all routes ready
 ```
 
 #### Options
@@ -34,6 +38,7 @@ Currently this options are available:
 
   * `lastRoute` - if false `express-errors` will not maintain last app.use route(NotFound error)
   * `plain` - if app.settings['view engine'] is undefined OR this option is presented res.send instead of res.render will be used
+  * `logger` - custom logger function
 
 #### Defining an error
 Yeah, you can. Use .define method:
@@ -48,5 +53,4 @@ Yeah, you can. Use .define method:
 
 #### TODO
 
-  * Bundled views
   * More options

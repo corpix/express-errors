@@ -1,7 +1,13 @@
 var fs = require('fs')
   , path = require('path')
   , basename = path.basename
+  , defaultLogger
   , ex = {};
+
+defaultLogger = function(err){
+  console.error(new Date().toLocaleString(), '>>', err);
+  console.log(err.stack);
+}
 
 ex.define = function(opts){
   var fn = function(){
@@ -22,12 +28,10 @@ ex.define = function(opts){
 }
 
 ex.bind = function(app, opts){
-  if(!opts)
-    opts = {};
+  if(!opts) opts = {};
+  opts.logger || (opts.logger = defaultLogger);
 
-  if(!app.set('view engine')){
-    opts.plain = true;
-  }
+  if(!app.set('view engine')) opts.plain = true;
 
   if(opts.lastRoute == undefined || opts.lastRoute == true) {
     app.use(function(req, res, next){
@@ -37,8 +41,7 @@ ex.bind = function(app, opts){
 
   app.use(function(err, req, res, next){
     if(!err.name || err.name == 'Error' || !ex.hasOwnProperty(err.name)){
-      console.error(new Date().toLocaleString(), '>>', err);
-      console.log(err.stack);
+      opts.logger(err);
 
       if(req.xhr || opts.plain)
         return res.send({ error: 'Internal error' }, 500);
@@ -52,8 +55,7 @@ ex.bind = function(app, opts){
       });
     }
 
-    if(req.xhr)
-      return res.send({ error: err.message }, err.status);
+    if(req.xhr) return res.send({ error: err.message }, err.status);
 
     if(opts.plain){
       res.send(err.message, err.status);
@@ -79,12 +81,10 @@ ex.bind = function(app, opts){
 var httpErrors = __dirname + '/http';
 
 fs.readdir(httpErrors, function(err, files){
-  if(err)
-    throw new Error(err);
+  if(err) throw new Error(err);
 
   files.forEach(function(file){
-    if(file.charAt(0) == '.')
-      return;
+    if(file.charAt(0) == '.') return;
 
     var opts = require(httpErrors + '/' + file);
     opts.name = basename(file, '.json');
