@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/corpix/express-errors.png)](http://travis-ci.org/corpix/express-errors)
 ##### Express errors
 
 Available in NPM `npm install express-errors`
