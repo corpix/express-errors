@@ -1,8 +1,8 @@
 {
-  "author": "Corpix <me@corpix.ru> (http://corpix.ru)",
+  "author": "Dmitry Moscowski <me@corpix.ru> (http://corpix.ru)",
   "name": "express-errors",
-  "description": "Error handler",
-  "version": "0.2.2",
+  "description": "Error handler middleware for express",
+  "version": "0.3.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/corpix/express-errors.git"
@@ -11,7 +11,14 @@
     "node": ">=0.5.0"
   },
   "dependencies": {
-    "express": ">2.x"
+    "express": ">=3.x"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "~1.12.0",
+    "request": "~2.22.0"
+  },
+  "scripts": {
+    "prepublish": "npm prune",
+    "test": "./node_modules/.bin/mocha"
+  }
 }
