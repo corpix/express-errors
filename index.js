@@ -6,7 +6,7 @@ var fs = require('fs'),
     hasOwn = Object.prototype.hasOwnProperty,
     ex = {};
 
-ERRORS_DIR = pjoin(__dirname, 'errors');
+var ERRORS_DIR = pjoin(__dirname, 'errors');
 
 function Errors(app, config) {
     config || (config = { });
