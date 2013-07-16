@@ -2,7 +2,7 @@
   "author": "Dmitry Moscowski <me@corpix.ru> (http://corpix.ru)",
   "name": "express-errors",
   "description": "Error handler middleware for express",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/corpix/express-errors.git"
